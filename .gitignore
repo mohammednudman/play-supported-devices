@@ -1,0 +1,5 @@
+data/devices.json
+dist/
+node_modules/
+*.log
+*.tmp

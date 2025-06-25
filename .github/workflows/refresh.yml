@@ -1,0 +1,37 @@
+name: refresh-and-publish
+on:
+  schedule:
+    - cron:  '0 */3 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: pnpm/action-setup@v2
+        with: { version: 9 }
+      - run: corepack enable
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Refresh cache
+        run: pnpm run update
+      - name: Detect changes
+        id: diff
+        run: |
+          git diff --quiet || echo "::set-output name=changed::true"
+      - name: Commit & bump patch
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          npm version patch -m "chore: auto-refresh cache %s"
+          git add data/devices.json package.json
+          git commit -m "chore: refresh cache"
+          git push --follow-tags
+      - name: Publish to npm
+        if: steps.diff.outputs.changed == 'true'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
