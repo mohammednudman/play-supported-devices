@@ -22,7 +22,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mohammednudman/play-supported-devices"
+    "url": "git+https://github.com/mohammednudman/play-supported-devices.git"
   },
   "engines": {
     "node": ">=18"
@@ -44,5 +44,12 @@
     "tsup": "^8",
     "typescript": "^5",
     "vitest": "^3.2.4"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "bugs": {
+    "url": "https://github.com/mohammednudman/play-supported-devices/issues"
+  },
+  "homepage": "https://github.com/mohammednudman/play-supported-devices#readme"
 }
