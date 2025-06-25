@@ -28,8 +28,10 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "vitest",
     "build": "tsup src --format esm,cjs --dts",
+    "test": "vitest",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier --check .",
     "dev": "tsup src --watch --format esm,cjs --dts",
     "prepublishOnly": "npm run build",
     "update": "node scripts/update.js"
