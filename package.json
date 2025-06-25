@@ -31,7 +31,9 @@
     "build": "tsup src --format esm,cjs --dts",
     "test": "vitest",
     "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --check .",
+    "format:fix": "prettier --write .",
     "dev": "tsup src --watch --format esm,cjs --dts",
     "prepublishOnly": "npm run build",
     "update": "node scripts/update.js"
