@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  ci:
+    name: ✅ Lint, Format, Build, Test
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # allows CI to push code
+
+    steps:
+      - name: 🧾 Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: 🟢 Enable Corepack
+        run: corepack enable
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: 📦 Install Dependencies
+        run: npm ci
+
+      - name: ✨ Prettier Format Fix
+        run: npm run format:fix
+
+      - name: 🔍 ESLint Auto-Fix
+        run: npm run lint:fix
+
+      - name: 📂 Check Required Outputs Exist
+        run: |
+          npm run build
+          test -f dist/index.js || (echo "❌ Missing dist/index.js" && exit 1)
+          test -f dist/index.d.ts || (echo "❌ Missing dist/index.d.ts" && exit 1)
+
+      - name: 🧪 Run Tests
+        run: npm test
+
+      - name: 📤 Commit & Push Fixes if Needed
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          if git diff --cached --quiet; then
+            echo "✅ No lint or format changes to commit."
+          else
+            git commit -m "chore(ci): auto-fix lint and format"
+            git push origin main
+          fi

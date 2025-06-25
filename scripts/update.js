@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { fetchHTML } = require('../dist/fetcher');  // JS
+const { fetchHTML } = require('../dist/fetcher'); // JS
 const { parseHTML } = require('../dist/parser');
 
 const OUTPUT_PATH = path.resolve(__dirname, '../data/devices.json');
