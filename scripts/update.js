@@ -24,6 +24,7 @@ if (!fs.existsSync(path.resolve(__dirname, '../dist/fetcher.js'))) {
     console.log('✅ HTML fetched. Length:', html.length);
     const devices = parseHTML(html);
     console.log('✅ Parsed entries:', devices.length);
+    fs.mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
     fs.writeFileSync(OUTPUT_PATH, JSON.stringify(devices, null, 2));
     console.log(`[${new Date().toISOString()}] ✅ Updated ${devices.length} devices`);
   } catch (err) {
