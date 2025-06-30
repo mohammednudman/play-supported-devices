@@ -5,31 +5,25 @@ import { DeviceEntry } from './types';
 let _index: DeviceIndex | null = null;
 
 function getIndex(): DeviceIndex {
-    if (!_index) {
-        const entries = readCache();
-        _index = new DeviceIndex(entries);
-    }
-    return _index;
+  if (!_index) {
+    const entries = readCache();
+    _index = new DeviceIndex(entries);
+  }
+  return _index;
 }
 
 export function getAllDevices(): DeviceEntry[] {
-    return readCache();
+  return readCache();
 }
 
 export function listColumns(): (keyof DeviceEntry)[] {
-    return getIndex().listColumns();
+  return getIndex().listColumns();
 }
 
-export function searchExact(
-    column: keyof DeviceEntry,
-    value: string
-): DeviceEntry[] {
-    return getIndex().findExact(column, value);
+export function searchExact(column: keyof DeviceEntry, value: string): DeviceEntry[] {
+  return getIndex().findExact(column, value);
 }
 
-export function searchContains(
-    column: keyof DeviceEntry,
-    value: string
-): DeviceEntry[] {
-    return getIndex().findContains(column, value);
+export function searchContains(column: keyof DeviceEntry, value: string): DeviceEntry[] {
+  return getIndex().findContains(column, value);
 }
