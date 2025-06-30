@@ -14,9 +14,9 @@ jobs:
         with: { version: 9 }
       - run: corepack enable
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
       - name: Refresh cache
-        run: pnpm run update
+        run: npm run update
       - name: Detect changes
         id: diff
         run: |
