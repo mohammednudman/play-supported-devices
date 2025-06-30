@@ -37,7 +37,7 @@
     "format:fix": "prettier --write .",
     "dev": "tsup src --watch --format esm,cjs --dts",
     "prepublishOnly": "npm run build",
-    "update": "node scripts/update.js"
+    "update": "npm run build && node scripts/update.js"
   },
   "author": "Mohammed Nudman Raza Shaikh",
   "dependencies": {

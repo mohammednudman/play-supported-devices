@@ -13,6 +13,11 @@ const __dirname = path.dirname(__filename);
 
 const OUTPUT_PATH = path.resolve(__dirname, '../data/devices.json');
 
+if (!fs.existsSync(path.resolve(__dirname, '../dist/fetcher.js'))) {
+  console.error('❌ Build output not found. Please run `npm run build` first.');
+  process.exit(1);
+}
+
 (async () => {
   try {
     const html = await fetchHTML();
