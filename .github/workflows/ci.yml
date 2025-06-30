@@ -50,7 +50,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add src dist package.json package-lock.json
+          git add src package.json package-lock.json
           if git diff --cached --quiet; then
             echo "✅ No lint or format changes to commit."
           else
