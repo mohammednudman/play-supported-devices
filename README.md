@@ -3,6 +3,7 @@
 [![npm](https://img.shields.io/npm/v/play-supported-devices?color=blue&label=npm)](https://www.npmjs.com/package/play-supported-devices)
 [![license](https://img.shields.io/npm/l/play-supported-devices)](./LICENSE)
 [![auto-update](https://github.com/mohammednudman/play-supported-devices/actions/workflows/refresh.yml/badge.svg)](https://github.com/mohammednudman/play-supported-devices/actions)
+[![CI](https://github.com/mohammednudman/play-supported-devices/actions/workflows/ci.yml/badge.svg)](https://github.com/mohammednudman/play-supported-devices/actions)
 
 > A fast, searchable, auto-updating local cache of [Google Play Supported Devices](https://storage.googleapis.com/play_public/supported_devices.html) as a lightweight NPM package.
 
