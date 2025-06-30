@@ -1,7 +1,15 @@
-const fs = require('fs');
-const path = require('path');
-const { fetchHTML } = require('../dist/fetcher');  // JS
-const { parseHTML } = require('../dist/parser');
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { fetchHTML } from '../dist/fetcher.js';
+import { parseHTML } from '../dist/parser.js';
+/**
+ * This script fetches the latest HTML from the specified URL,
+ * parses it to extract device information, and saves it to a JSON file.
+ * It is intended to be run in a development environment.
+ */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const OUTPUT_PATH = path.resolve(__dirname, '../data/devices.json');
 

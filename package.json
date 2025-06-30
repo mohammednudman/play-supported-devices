@@ -2,6 +2,7 @@
   "name": "play-supported-devices",
   "version": "1.0.0",
   "description": "Fast, searchable cache of Google Play supported devices (auto-updated every 3 h)",
+  "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -28,8 +29,12 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "vitest",
     "build": "tsup src --format esm,cjs --dts",
+    "test": "vitest",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
     "dev": "tsup src --watch --format esm,cjs --dts",
     "prepublishOnly": "npm run build",
     "update": "node scripts/update.js"
@@ -41,6 +46,10 @@
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
+    "prettier": "^3.6.1",
     "tsup": "^8",
     "typescript": "^5",
     "vitest": "^3.2.4"
