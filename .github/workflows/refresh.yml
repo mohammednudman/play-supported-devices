@@ -38,13 +38,16 @@ jobs:
 
       - name: Commit & bump patch version
         if: steps.diff.outputs.changed == 'true'
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           pnpm version patch --no-git-tag-version
-          git add data/devices.json package.json
+          git add -A
           git commit -m "chore: refresh cache"
           git tag v$(jq -r .version package.json)
+          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}
           git push origin HEAD --tags
 
       - name: Configure npm token for publish
