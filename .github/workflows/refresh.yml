@@ -2,8 +2,8 @@ name: refresh-and-publish
 
 on:
   schedule:
-    - cron: '0 */3 * * *'  # Every 3 hours
-  workflow_dispatch:       # Manual trigger
+    - cron: '0 */3 * * *'  # every 3 hours
+  workflow_dispatch:       # manual trigger
 
 jobs:
   update:
@@ -20,7 +20,7 @@ jobs:
         with:
           version: 9
 
-      - name: Enable corepack for pnpm
+      - name: Enable corepack
         run: corepack enable
 
       - name: Install dependencies
@@ -36,7 +36,7 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Commit & bump patch
+      - name: Commit & bump patch version
         if: steps.diff.outputs.changed == 'true'
         run: |
           git config user.name  "github-actions[bot]"
@@ -47,8 +47,15 @@ jobs:
           git tag v$(jq -r .version package.json)
           git push origin HEAD --tags
 
+      - name: Configure npm token for publish
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish to npm
         if: steps.diff.outputs.changed == 'true'
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: pnpm publish --access public
