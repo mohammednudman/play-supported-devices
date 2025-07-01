@@ -1,37 +1,54 @@
 name: refresh-and-publish
+
 on:
   schedule:
-    - cron:  '0 */3 * * *'
-  workflow_dispatch:
+    - cron: '0 */3 * * *'  # Every 3 hours
+  workflow_dispatch:       # Manual trigger
 
 jobs:
   update:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - uses: pnpm/action-setup@v2
-        with: { version: 9 }
-      - run: corepack enable
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Enable corepack for pnpm
+        run: corepack enable
+
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
+
       - name: Refresh cache
-        run: npm run update
+        run: pnpm update
+
       - name: Detect changes
         id: diff
         run: |
-          git diff --quiet || echo "::set-output name=changed::true"
+          if ! git diff --quiet; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Commit & bump patch
         if: steps.diff.outputs.changed == 'true'
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          npm version patch -m "chore: auto-refresh cache %s"
+          pnpm version patch --no-git-tag-version
           git add data/devices.json package.json
           git commit -m "chore: refresh cache"
-          git push --follow-tags
+          git tag v$(jq -r .version package.json)
+          git push origin HEAD --tags
+
       - name: Publish to npm
         if: steps.diff.outputs.changed == 'true'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+        run: pnpm publish --access public
